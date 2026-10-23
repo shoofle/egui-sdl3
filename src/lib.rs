@@ -132,7 +132,7 @@ impl EguiRunOutput {
         &mut self,
         ctx: &egui::Context,
         state: &mut State,
-        mut run_ui: impl FnMut(&egui::Context),
+        mut run_ui: impl FnMut(&mut egui::Ui),
     ) {
         let raw_input = state.take_egui_input();
         // Our public API hands the caller an `&egui::Context`, so we drive egui through
@@ -145,7 +145,7 @@ impl EguiRunOutput {
             textures_delta,
             shapes,
             pixels_per_point,
-        } = ctx.run_ui(raw_input, |ui| run_ui(ui.ctx()));
+        } = ctx.run_ui(raw_input, run_ui);
         state.handle_platform_output(platform_output);
 
         self.shapes = shapes;
