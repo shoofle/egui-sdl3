@@ -119,7 +119,7 @@ impl EguiRunOutput {
     /// - `ctx`: The [`egui::Context`] used to run the UI.
     /// - `state`: A backend state that provides input for egui and
     ///   handles platform output (clipboard, cursor, etc.).
-    /// - `run_ui`: A closure that builds the UI using the given `egui::Context`.
+    /// - `run_ui`: A closure that builds the UI using the given `egui::Ui`.
     ///
     /// # Behavior
     /// - Takes input events from `state`.
@@ -135,10 +135,6 @@ impl EguiRunOutput {
         mut run_ui: impl FnMut(&mut egui::Ui),
     ) {
         let raw_input = state.take_egui_input();
-        // Our public API hands the caller an `&egui::Context`, so we drive egui through
-        // `run_ui` (which internally handles multi-pass layout) and bridge the root `Ui`
-        // back to its context. This keeps the `FnMut(&egui::Context)` closure contract
-        // while avoiding the deprecated `Context::run`.
         let egui::FullOutput {
             platform_output,
             viewport_output,
